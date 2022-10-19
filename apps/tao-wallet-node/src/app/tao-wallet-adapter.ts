@@ -7,13 +7,16 @@ const { lnmSecret, network } = environment
 const initializeTao = () => {
   const tao = new TaoWallet({ lnmSecret, network })
 
+  // Login
   const login = () => tao.login();
   
   // Create an invoice to deposit funds (amount in sats).
   const depositInvoice = (input: { type: Addresses; amountSats: number }): Promise<string> => tao.fetchDepositAddress(input)
+  
   // Create an on-chain address to deposit funds.
   const depositAddress = (input: { type: Addresses }): Promise<string> => tao.fetchDepositAddress(input)
   
+  // Get balances.
   const getBalance = (): Promise<{
     balanceBtc: number;
     balanceUsd: number;
@@ -21,12 +24,14 @@ const initializeTao = () => {
     usdEquivalent: string;
   }> => tao.fetchBalances()
   
+  // Swap btc for $2 of usd.
   const swap = (input: {
     from: Currencies,
     to: Currencies,
     amountUsd: number,
   }): Promise<any> => tao.swap(input)
   
+  // Swap $1 of usd for btc.
   const send = (input: {
     type: Addresses,
     address: string,
