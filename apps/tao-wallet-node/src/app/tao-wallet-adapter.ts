@@ -10,77 +10,28 @@ const initializeTao = () => {
   const login = () => tao.login();
   
   // Create an invoice to deposit funds (amount in sats).
-  const depositInvoice = async (): Promise<string> => {
-    try {
-      const depositInvoice: string = await tao.fetchDepositAddress({ type: 'bolt11', amountSats: 1000000 })
-      console.log({depositInvoice});
-  
-      return depositInvoice;
-    } catch (e) {
-      console.log('error: ', e)
-    }
-  }
-  
+  const depositInvoice = (input: { type: Addresses; amountSats: number }): Promise<string> => tao.fetchDepositAddress(input)
   // Create an on-chain address to deposit funds.
-  const depositAddress = async (): Promise<string> => {
-    try {
-      const depositAddress: string = await tao.fetchDepositAddress({ type: 'on-chain' })
-      console.log({depositAddress});
+  const depositAddress = (input: { type: Addresses }): Promise<string> => tao.fetchDepositAddress(input)
   
-      return depositAddress;
-    } catch (e) {
-      console.log('error: ', e)
-    }
-  }
+  const getBalance = (): Promise<{
+    balanceBtc: number;
+    balanceUsd: number;
+    btcEquivalent: string;
+    usdEquivalent: string;
+  }> => tao.fetchBalances()
   
-  const getBalance = async () => {
-    try {
-      const balances = await tao.fetchBalances()
-      console.log({ balances });
-  
-      return balances;
-    } catch (e) {
-      console.log('error: ', e)
-    }
-  }
-  
-  const swap: (input: {
+  const swap = (input: {
     from: Currencies,
     to: Currencies,
     amountUsd: number,
-  }) => Promise<any> = async ({
-    from,
-    to,
-    amountUsd,
-  }) => {
-    try {
-      const swap = await tao.swap({ from, to, amountUsd })
-      console.log({ swap })
-    
-      return swap;
-    } catch (e) {
-      console.log('error: ', e)
-    }
-  }
+  }): Promise<any> => tao.swap(input)
   
-  const send: (input: {
+  const send = (input: {
     type: Addresses,
     address: string,
     amountSats?: number,
-  }) => Promise<any> = async ({
-    type,
-    address,
-    amountSats,
-  }) => {
-    try {
-      const swap = await tao.send({ type, address, amountSats })
-      console.log({ swap })
-  
-      return swap;
-    } catch (e) {
-      console.log('error: ', e)
-    }
-  }
+  }): Promise<any> => tao.send(input)
   
   return {
     login,
